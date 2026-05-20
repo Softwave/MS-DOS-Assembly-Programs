@@ -59,7 +59,6 @@ start:
 .sg:
     fld st0                 ; 2x
     fsin                    ; Calc the sine of whatever is in st0 and replace it
-    fcos
     fld1                   
     faddp st1               ; 0-2
     fild word [n127]        
