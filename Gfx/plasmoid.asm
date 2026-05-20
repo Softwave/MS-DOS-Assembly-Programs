@@ -1,6 +1,7 @@
 ; Trippy plasma toy for MS-DOS 
 ; Based on various examples 
 ; NASM plas.asm -o plas.com -f bin
+; (c) S0ftwave, 2026 https://s0ftwave.net/
 
 org 100h
 
@@ -15,25 +16,26 @@ start:
     inc dx                  ; Cheeky to inc here 
     xor bl, bl              ; BL is our loop counter so we 0 it out
 .pal:
-    mov al, bl              ; Red 
+    mov al, bl              ; Red, closer to blue phase so it mixes more violet
+    add al, 68
     test al, 0x80           ; We AND it with 0x80/128 to see if our colour value is past halfway
     jz .pr                  
     not al                  ; We invert the bits if we're in the 2nd half
 .pr:
-    shr al, 1               ; We align to VGA values
+    shr al, 1
     out dx, al              ; Red out 
 
-    mov al, bl              ; Green +85
-    add al, 85
+    mov al, bl
+    add al, 176
     test al, 0x80           ; Same test
     jz .pg                      
     not al
 .pg:
-    shr al, 1
+    shr al, 4
     out dx, al              ; We send green to VGA
 
-    mov al, bl              ; Same deal for blue, except +170 instead of +85
-    add al, 170
+    mov al, bl
+    add al, 8
     test al, 0x80
     jz .pb              
     not al
@@ -57,6 +59,7 @@ start:
 .sg:
     fld st0                 ; 2x
     fsin                    ; Calc the sine of whatever is in st0 and replace it
+    fcos
     fld1                   
     faddp st1               ; 0-2
     fild word [n127]        
@@ -123,7 +126,7 @@ start:
     imul ax, ax, 5
     mov bx, [yv]
     add bx, cx              
-    shr bx, 2
+    shr bx, 0
     add ax, bx
     and ax, 0x00FF
     mov bx, ax
