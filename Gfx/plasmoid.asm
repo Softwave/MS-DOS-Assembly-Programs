@@ -104,6 +104,11 @@ start:
     mov ax, cx              
     shr ax, 1                   ; Shift right to divide by 2 -- X/2
     add si, ax                  ; t+X/2
+;; This has very trippy, crystal-type effects. 
+;;.trippy1:
+;;    movzx ax, byte [yv]
+;;    xor si, ax 
+;;.back1:
     and si, 0x00FF              ; Keep within bounds
     movzx si, byte [sintab+si]  ; SI contains horizontal wave 
 
@@ -131,6 +136,10 @@ start:
     mov bx, ax
     movzx dx, byte [sintab+bx]
     add si, dx
+;;.trippy2:
+;;    xor ax, cx  
+;;    xor si, dx
+;;.back2:
 
     ;; Radial, 7x speed
     ;; Sin(sqrt((X-160)^2+(Y-100)^2)/4 
